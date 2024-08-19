@@ -1,7 +1,7 @@
 #include "buildcfg.h"
-#include "kxbasep.h"
+#include "kxmip.h"
 
-KXBASEAPI POWER_PLATFORM_ROLE WINAPI PowerDeterminePlatformRoleEx(
+KXMIAPI POWER_PLATFORM_ROLE WINAPI PowerDeterminePlatformRoleEx(
 	IN	ULONG	Version)
 {
 	return PowerDeterminePlatformRole();
@@ -13,11 +13,14 @@ KXBASEAPI POWER_PLATFORM_ROLE WINAPI PowerDeterminePlatformRoleEx(
 // useful manner, so they are stubbed for now.
 //
 
-KXBASEAPI ULONG WINAPI PowerRegisterSuspendResumeNotification(
+KXMIAPI ULONG WINAPI PowerRegisterSuspendResumeNotification(
 	IN	ULONG			Flags,
 	IN	HANDLE			Recipient,
 	OUT	PHPOWERNOTIFY	RegistrationHandle)
 {
+	KexLogWarningEvent(L"Unimplemented API PowerRegisterSuspendResumeNotification called");
+	KexDebugCheckpoint();
+
 	if (Flags != DEVICE_NOTIFY_CALLBACK) {
 		return RtlNtStatusToDosError(STATUS_INVALID_PARAMETER);
 	}
@@ -25,8 +28,11 @@ KXBASEAPI ULONG WINAPI PowerRegisterSuspendResumeNotification(
 	return RtlNtStatusToDosError(STATUS_NOT_SUPPORTED);
 }
 
-KXBASEAPI ULONG WINAPI PowerUnregisterSuspendResumeNotification(
+KXMIAPI ULONG WINAPI PowerUnregisterSuspendResumeNotification(
 	IN OUT	HPOWERNOTIFY	RegistrationHandle)
 {
+	KexLogWarningEvent(L"Unimplemented API PowerUnregisterSuspendResumeNotification called");
+	KexDebugCheckpoint();
+
 	return RtlNtStatusToDosError(STATUS_NOT_SUPPORTED);
 }

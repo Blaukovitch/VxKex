@@ -1,11 +1,7 @@
 #include "buildcfg.h"
-#include "kxbasep.h"
+#include "kxmip.h"
 
-//
-// TODO: Actually redirect wldp.dll to kxbase.dll somehow.
-//
-
-KXBASEAPI HRESULT WINAPI WldpQueryWindowsLockdownMode(
+KXMIAPI HRESULT WINAPI WldpQueryWindowsLockdownMode(
 	OUT	PWLDP_WINDOWS_LOCKDOWN_MODE	LockdownMode)
 {
 	ASSERT (LockdownMode != NULL);

@@ -84,7 +84,7 @@
       <Command>"$(SolutionDir)\01-Development Utilities\7zSfx\makesfx.bat" /$(Configuration)</Command>
       <Message>Building Self-Extracting Executable (SFX)</Message>
       <Outputs>$(SolutionDir)\KexSetup_$(Configuration).exe</Outputs>
-      <Inputs>"$(SolutionDir)\01-Development Utilities\7zSfx\makesfx.bat"</Inputs>
+      <Inputs>"$(SolutionDir)\01-Development Utilities\7zSfx\makesfx.bat";$(SolutionDir)\00-Documentation\Changelog.txt</Inputs>
     </CustomBuildStep>
     <PreBuildEvent>
       <Command>
@@ -102,6 +102,7 @@
     </PostBuildEvent>
     <Manifest>
       <EnableDPIAwareness>true</EnableDPIAwareness>
+      <AdditionalManifestFiles>KexSetup.manifest</AdditionalManifestFiles>
     </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -164,6 +165,7 @@
     </PostBuildEvent>
     <Manifest>
       <EnableDPIAwareness>true</EnableDPIAwareness>
+      <AdditionalManifestFiles>KexSetup.manifest</AdditionalManifestFiles>
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -171,6 +173,7 @@
     <ClCompile Include="gui.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="perform.c" />
+    <ClCompile Include="prereq.c" />
     <ClCompile Include="util.c" />
     <ClCompile Include="version.c" />
   </ItemGroup>

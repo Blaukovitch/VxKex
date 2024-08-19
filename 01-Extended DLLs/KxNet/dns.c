@@ -1,8 +1,5 @@
 #include "buildcfg.h"
-#include "kxbasep.h"
-#include <WinDNS.h>
-
-#include "dnsp.h"
+#include "kxnetp.h"
 
 //
 // This DnsQueryEx implementation mainly exists to support Qt6Network.
@@ -12,7 +9,7 @@
 // want, but requires a lot more effort and research since it's not
 // documented.
 //
-KXBASEAPI DNS_STATUS WINAPI DnsQueryEx(
+KXNETAPI DNS_STATUS WINAPI DnsQueryEx(
 	IN		PDNS_QUERY_REQUEST	Request,
 	IN OUT	PDNS_QUERY_RESULT	Result,
 	IN OUT	PDNS_QUERY_CANCEL	Cancel OPTIONAL)
@@ -54,14 +51,18 @@ KXBASEAPI DNS_STATUS WINAPI DnsQueryEx(
 		Request->QueryContext);
 
 	if (Request->Version != 1 || Result->Version != 1) {
+		// Version could be 3, which is only available in Win11 and above.
+		KexDebugCheckpoint();
 		return ERROR_INVALID_PARAMETER;
 	}
 
 	if (Request->QueryCompletionCallback) {
+		KexDebugCheckpoint();
 		return DNS_RCODE_NOT_IMPLEMENTED;
 	}
 
 	if (Cancel) {
+		KexDebugCheckpoint();
 		return DNS_RCODE_NOT_IMPLEMENTED;
 	}
 

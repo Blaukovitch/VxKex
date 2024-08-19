@@ -1,6 +1,9 @@
-#pragma once
+#include "buildcfg.h"
 #include <KexComm.h>
 #include <WinDNS.h>
+#include <WinHTTP.h>
+
+EXTERN PKEX_PROCESS_DATA KexData;
 
 #define DNS_ADDR_MAX_SOCKADDR_LENGTH 32
 
@@ -116,5 +119,6 @@ typedef struct _DNS_QUERY_INFO {
 	PVOID			ReservedName;
 } TYPEDEF_TYPE_NAME(DNS_QUERY_INFO);
 
+// Undocumented function from dnsapi.dll
 DNS_STATUS WINAPI DnsQueryExW(
 	IN OUT	PDNS_QUERY_INFO	QueryInfo);

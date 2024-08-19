@@ -1,10 +1,9 @@
 #include "buildcfg.h"
-#include "kxbasep.h"
-#include <bcrypt.h>
+#include "kxcrypp.h"
 
-HANDLE KsecDD = NULL;
+STATIC HANDLE KsecDD = NULL;
 
-NTSTATUS BaseInitializeCrypto(
+STATIC NTSTATUS InitializeRng(
 	VOID)
 {
 	NTSTATUS Status;
@@ -39,7 +38,7 @@ NTSTATUS BaseInitializeCrypto(
 // This function creates random data and places it into the specified
 // buffer.
 //
-KXBASEAPI BOOL WINAPI ProcessPrng(
+KXCRYPAPI BOOL WINAPI ProcessPrng(
 	OUT	PBYTE	Buffer,
 	IN	SIZE_T	BufferCb)
 {
@@ -50,7 +49,7 @@ KXBASEAPI BOOL WINAPI ProcessPrng(
 	ASSERT (BufferCb <= ULONG_MAX);
 
 	if (!KsecDD) {
-		Status = BaseInitializeCrypto();
+		Status = InitializeRng();
 		if (!NT_SUCCESS(Status)) {
 			return FALSE;
 		}
@@ -72,42 +71,4 @@ KXBASEAPI BOOL WINAPI ProcessPrng(
 
 	ASSERT (NT_SUCCESS(Status));
 	return NT_SUCCESS(Status);
-}
-
-//
-// This is just a convenience function which wraps other functions in bcrypt.dll.
-//
-
-KXBASEAPI NTSTATUS WINAPI BCryptHash(
-	IN	BCRYPT_ALG_HANDLE	Algorithm,
-	IN	PBYTE				Secret OPTIONAL,
-	IN	ULONG				SecretCb,
-	IN	PBYTE				Input,
-	IN	ULONG				InputCb,
-	OUT	PBYTE				Output,
-	IN	ULONG				OutputCb)
-{
-	NTSTATUS Status;
-	BCRYPT_HASH_HANDLE HashHandle;
-
-	HashHandle = NULL;
-
-	Status = BCryptCreateHash(Algorithm, &HashHandle, 0, 0, Secret, SecretCb, 0);
-	if (!NT_SUCCESS(Status)) {
-		goto CleanupExit;
-	}
-
-	Status = BCryptHashData(HashHandle, Input, InputCb, 0);
-	if (!NT_SUCCESS(Status)) {
-		goto CleanupExit;
-	}
-
-	Status = BCryptFinishHash(HashHandle, Output, OutputCb, 0);
-
-CleanupExit:
-	if (HashHandle) {
-		BCryptDestroyHash(HashHandle);
-	}
-
-	return Status;
 }
